@@ -1,4 +1,12 @@
 int sensorPin=0;
+
+double Thermistor(int RawADC) {
+double Temp;
+Temp = log(((10240000/RawADC) - 10000));
+Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp ))* Temp );
+Temp = Temp - 273.15;           
+ return Temp;
+}
 void setup() {
    Serial.begin(9600);
 }
@@ -6,22 +14,13 @@ void setup() {
 void loop() {
   //getting the voltage reading from the temperature sensor
  int reading = analogRead(sensorPin);  
- 
- // converting that reading to voltage, for 3.3v arduino use 3.3
- float voltage = reading * 5.0;
- voltage /= 1024.0; 
- 
+ double temp =  Thermistor(reading);
  // print out the voltage
- Serial.print(voltage); Serial.println(" volts");
- 
- // now print out the temperature
- float temperatureC = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset
-                                               //to degrees ((voltage - 500mV) times 100)
- Serial.print(temperatureC); Serial.println(" degrees C");
- 
- // now convert to Fahrenheit
- float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
- Serial.print(temperatureF); Serial.println(" degrees F");
- 
+ Serial.println("Temp. : ");
+ Serial.print(temp); 
+ Serial.println(" Celsius");
+ double fahren = temp * 9 / 5 +32;
+ Serial.print(fahren);
+ Serial.println(" Fahrenheit");
  delay(1000); 
 }

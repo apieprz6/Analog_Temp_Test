@@ -60,6 +60,7 @@ void loop() {
       delay(1000);
       servo.detach();
     }
+    change = false;
  }
  Serial.print("is currently: ");
  Serial.println(staticTemp);

@@ -4,6 +4,7 @@ int sensorPin=0;
 Servo servo;
 double recieved=0, staticTemp = 72, threshold = 1;
 bool change=false;
+double fahren =0;
 
 
 double Thermistor(int RawADC) {
@@ -14,13 +15,17 @@ double Thermistor(int RawADC) {
   return Temp;
 }
 bool checkChange(double temp){
-  if(staticTemp == recieved){
-    return false;
-  }
-  else{
+  if(staticTemp != recieved){
     staticTemp = recieved;
     return true;
   }
+  if(fahren > staticTemp && servo.read()!=180){
+    return true;
+  }
+  else if(fahren < staticTemp && servo.read()!=0){
+    return true;
+  }
+  return false;
 }
 void setup() {
    Serial.begin(9600);
@@ -43,7 +48,7 @@ void loop() {
  /*Serial.println("Temp. : ");
  Serial.print(temp); 
  Serial.println(" Celsius");
- */double fahren = temp * 9 / 5 +32;/*
+ */fahren = temp * 9 / 5 +32;/*
  Serial.print(fahren);
  Serial.println(" Fahrenheit");*/
  change = checkChange(staticTemp);

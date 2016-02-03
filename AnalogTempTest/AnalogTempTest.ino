@@ -36,8 +36,10 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available() >0){
-    recieved = Serial.read();  
+  if(Serial.available() >=2){
+    for(int i=0;i<2;i++){
+      recieved = Serial.read();
+    }
     Serial.print("RECIEVED: ");
     Serial.println(recieved);
   }

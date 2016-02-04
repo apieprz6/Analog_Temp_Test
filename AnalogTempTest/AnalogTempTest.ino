@@ -2,7 +2,9 @@
 
 int sensorPin=0;
 Servo servo;
-double recieved=0, staticTemp = 72, threshold = 1;
+double staticTemp = 72, threshold = 1, recievedFahren=0;
+double recieved[2];
+int ASCII[10]={48,49,50,51,52,53,54,55,56,57};
 bool change=false;
 double fahren =0;
 
@@ -15,8 +17,10 @@ double Thermistor(int RawADC) {
   return Temp;
 }
 bool checkChange(double temp){
-  if(staticTemp != recieved){
-    staticTemp = recieved;
+ for(int i=0; i <2; i++){
+  if(staticTemp != recieved[i]){
+    
+    staticTemp = recieved[0]+recieved[1];
     return true;
   }
   if(fahren > staticTemp && servo.read()!=180){
@@ -26,6 +30,7 @@ bool checkChange(double temp){
     return true;
   }
   return false;
+}
 }
 void setup() {
    Serial.begin(9600);
@@ -38,10 +43,21 @@ void setup() {
 void loop() {
   if(Serial.available() >=2){
     for(int i=0;i<2;i++){
-      recieved = Serial.read();
+      recieved[i] = Serial.read();
     }
+    for(int i=0;i<2;i++){
     Serial.print("RECIEVED: ");
-    Serial.println(recieved);
+    Serial.println(recieved[i]);
+    }
+    for(int a=0;a<2;a++){
+      for(int j=0;j<10;j++){
+        if(ASCII[j]==recieved[a]){
+          recieved[a]=j;
+        }
+      }
+    }
+    recieved[0]=recieved[0]*10;
+    recievedFahren=recieved[0]+recieved[1];
   }
   //getting the voltage reading from the temperature sensor
  int reading = analogRead(sensorPin);  
@@ -50,9 +66,9 @@ void loop() {
  /*Serial.println("Temp. : ");
  Serial.print(temp); 
  Serial.println(" Celsius");
- */fahren = temp * 9 / 5 +32;/*
+ */fahren = temp * 9 / 5 +32;
  Serial.print(fahren);
- Serial.println(" Fahrenheit");*/
+ Serial.println(" Fahrenheit");
  change = checkChange(staticTemp);
  if(change){
     if(fahren > staticTemp){
@@ -69,7 +85,7 @@ void loop() {
     }
     change = false;
  }
- Serial.print("is currently: ");
+ Serial.print("Static Temperature: ");
  Serial.println(staticTemp);
  delay(5000); 
 }

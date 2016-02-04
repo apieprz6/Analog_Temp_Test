@@ -71,7 +71,7 @@ void loop() {
  Serial.println(" Fahrenheit");
  change = checkChange(staticTemp);
  if(change){
-    if(fahren > staticTemp){
+    if(fahren >= staticTemp){
       servo.attach(9);
       servo.write(180);
       delay(1000);
@@ -85,7 +85,7 @@ void loop() {
     }
     change = false;
  }
- Serial.print("Static Temperature: ");
+ Serial.print("Set Temperature: ");
  Serial.println(staticTemp);
- delay(5000); 
+ delay(2000); 
 }

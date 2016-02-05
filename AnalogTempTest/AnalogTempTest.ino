@@ -18,17 +18,20 @@ double Thermistor(int RawADC) {
 }
 bool checkChange(double temp){
  for(int i=0; i <2; i++){
-  if(staticTemp != recieved[i]){
-    
+  if(staticTemp != recieved[0]+recieved[1]){
+    Serial.println("enter loop 1");
     staticTemp = recieved[0]+recieved[1];
     return true;
   }
   if(fahren > staticTemp && servo.read()!=180){
+    Serial.println("enter loop 2");
     return true;
   }
   else if(fahren < staticTemp && servo.read()!=0){
+    Serial.println("enter loop 3");
     return true;
   }
+  Serial.println("no loop");
   return false;
 }
 }

@@ -19,7 +19,6 @@ double Thermistor(int RawADC) {
 }
 
 bool checkChange(double temp) {
-  for (int i = 0; i < 2; i++) {
     if (staticTemp != recieved[0] + recieved[1]) {
       staticTemp = recieved[0] + recieved[1];
       return true;
@@ -31,7 +30,7 @@ bool checkChange(double temp) {
       return true;
     }
     return false;
-  }
+  
 }
 
 void servoSet() {
